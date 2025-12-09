@@ -4,8 +4,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-//swagger
+// CORS
+var corsPolicy = "LocalhostPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicy, policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:61274")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
+// swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -24,6 +36,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors(corsPolicy);
 
 app.UseAuthorization();
 
